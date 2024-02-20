@@ -24,10 +24,11 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
+    .catch(error => next(error))
 })
 
 const getDateTime = () => {
@@ -35,10 +36,11 @@ const getDateTime = () => {
   return (dateTimeObject.toDateString() + ' ' + dateTimeObject.toTimeString())
 }
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   Person.find({}).then(persons => {
     response.send(`<p>Phonebook has info for ${persons.length} ${(persons.length > 1 ? 'people' : 'person')}<br/>${getDateTime()}</p>`)
   })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
